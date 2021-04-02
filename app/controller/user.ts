@@ -1,16 +1,13 @@
 import { Controller } from 'egg';
 import NormalUserRule from '../validate/NormalUserRule'
-export default class HomeController extends Controller {
-  public async index() {
+export default class UserController extends Controller {
+  public async register() {
     const { ctx } = this;
     try {
       ctx.validate(NormalUserRule, ctx.request.body);
-      ctx.body = "注册"
+      ctx.body = "注册2"
     } catch (e) {
       console.log(e)
     }
   }
 }
-
-
-
