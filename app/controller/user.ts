@@ -12,13 +12,12 @@ export default class UserController extends Controller {
     const { ctx } = this;
     try {
       this.validateUserInfo();
-      ctx.body = "注册"
+      ctx.success({})
     } catch (e) {
-      console.log(e)
       if (e.errors) {
-        ctx.body = e.errors;
+        ctx.error(400, e.errors);
       } else {
-        ctx.body = e.message;
+        ctx.error(400, e.message);
       }
     }
   }
@@ -28,12 +27,15 @@ export default class UserController extends Controller {
     switch (data.registerType) {
       case RegisterTypeEnum.Email:
         ctx.validate(EmailUserRule, data);
+        ctx.helper.verifyImageCode(data.captcha);
         break;
       case RegisterTypeEnum.Phone:
         ctx.validate(PhoneUserRule, data);
+        ctx.helper.verifyImageCode(data.captcha);
         break;
       case RegisterTypeEnum.Normal:
         ctx.validate(NormalUserRule, data);
+        ctx.helper.verifyImageCode(data.captcha);
         break;
       default:
         throw new Error("不存在此类型")
